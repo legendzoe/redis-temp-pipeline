@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roger.redistemppipeline.mapper.OrderMapper">
+
+
+    <!--批量存储数据-->
+    <insert id="saveOrderByBatch">
+        insert into t_order(user_id, order_id_list) values
+        <foreach collection="orderVoList" separator="," item="item">
+            (#{item.userId}, #{item.orderIdList})
+        </foreach>
+    </insert>
+
+    <select id="selectAllOrder" resultType="com.roger.redistemppipeline.vo.OrderVo">
+        select id, user_id, order_id_list from t_order order by user_id
+    </select>
+
+</mapper>
