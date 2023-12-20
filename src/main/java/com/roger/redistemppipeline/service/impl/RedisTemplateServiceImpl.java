@@ -11,6 +11,8 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +24,7 @@ public class RedisTemplateServiceImpl implements RedisTemplateService {
 
     @Override
     public List<Object> excutePipelineSet(List<OrderVo> orderVoList) {
+        Instant start = Instant.now();
         List<Object> resultList = redisTemplate.executePipelined(new SessionCallback<List<OrderVo>>() {
             @Override
             public <K, V> List<OrderVo> execute(RedisOperations<K, V> operations) throws DataAccessException {
@@ -40,7 +43,9 @@ public class RedisTemplateServiceImpl implements RedisTemplateService {
             }
         });
         //获取redis的返回值
-
+        Instant end = Instant.now();
+        long time = Duration.between(start, end).toMillis();
+        System.out.println("redisTemplate 方法共耗时： " + time + "毫秒");
         return resultList;
     }
 
